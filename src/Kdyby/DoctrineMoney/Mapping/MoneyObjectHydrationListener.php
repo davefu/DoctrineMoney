@@ -198,11 +198,11 @@ class MoneyObjectHydrationListener extends Nette\Object implements Kdyby\Events\
 		}
 
 		if (!$this->hasRegisteredListener($class, Kdyby\Doctrine\Events::postLoadRelations, get_called_class())) {
-			$class->addEntityListener(Kdyby\Doctrine\Events::postLoadRelations, get_called_class(), Kdyby\Doctrine\Events::postLoadRelations);
+			$class->addEntityListener(Kdyby\Doctrine\Events::postLoadRelations, get_called_class(), 'postLoadRelations');
 		}
 
 		if (!$this->hasRegisteredListener($class, Events::preFlush, get_called_class())) {
-			$class->addEntityListener(Events::preFlush, get_called_class(), Events::preFlush);
+			$class->addEntityListener(Events::preFlush, get_called_class(), 'preFlush');
 		}
 	}
 
