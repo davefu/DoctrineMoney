@@ -187,8 +187,10 @@ class MoneyObjectHydrationListener extends Nette\Object implements Kdyby\Events\
 			}
 
 			$mapping = $class->getAssociationMapping($assocName);
-			foreach ($mapping['joinColumns'] as &$join) {
-				$join['referencedColumnName'] = $idColumn;
+			if(isset($mapping['joinColumns'])) {
+				foreach ($mapping['joinColumns'] as &$join) {
+					$join['referencedColumnName'] = $idColumn;
+				}
 			}
 
 			$class->setAssociationOverride($assocName, $mapping);
