@@ -33,8 +33,9 @@ use Nette\Utils\Json;
 /**
  * @author Filip Procházka <filip@prochazka.su>
  */
-class MoneyObjectHydrationListener extends Nette\Object implements Kdyby\Events\Subscriber
+class MoneyObjectHydrationListener implements Kdyby\Events\Subscriber
 {
+	use Nette\SmartObject;
 
 	/**
 	 * @var \Doctrine\Common\Cache\CacheProvider

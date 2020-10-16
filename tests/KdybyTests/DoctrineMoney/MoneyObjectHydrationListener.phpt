@@ -139,7 +139,7 @@ class MoneyObjectHydrationListenerTest extends IntegrationTestCase
 		Assert::equal(new Kdyby\Money\Money(1000, $currencies->find('CZK')), $order->getMoney());
 
 		// following loading should not fail
-		$order2 = $this->em->createQueryBuilder("o")
+		$order2 = $this->em->createQueryBuilder()
 			->select("o")
 			->from(OrderEntity::getClassName(), "o")
 			->where("o.id = :id")->setParameter("id", 1)
