@@ -32,7 +32,7 @@
 		"kdyby/doctrine": "^3.1.2@dev",
 		"doctrine/orm": "~2.5 <2.7.3",
 		"kdyby/money": "@dev",
-		"symfony/yaml": "~3.0"
+		"symfony/yaml": "~3.0|~4.0|~5.0"
 	},
 	"require-dev": {
 		"kdyby/annotations": "~2.4@dev",
