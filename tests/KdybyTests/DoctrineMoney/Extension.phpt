@@ -30,10 +30,18 @@ class ExtensionTest extends \KdybyTests\IntegrationTestCase
 
 	public function testRegisterTypes()
 	{
+		//TODO: due to switching to Nettrine\ORM, DB types has to be registered in config
 		$container = $this->createContainer();
-		/** @var \Kdyby\Doctrine\Connection $connection */
-		$connection = $container->getByType('Kdyby\Doctrine\Connection');
+		/** @var \Doctrine\DBAL\Connection $connection */
+		try {
+		$connection = $container->getByType('Doctrine\DBAL\Connection');
 		$connection->connect(); // initializes the types
+		dump(\Doctrine\DBAL\Types\Type::getTypesMap());
+		} catch (\Throwable $e) {
+			throw $e;
+			dump($e->getTrace()[0]);
+			die();
+		}
 
 		Assert::true(Type::getType('money') instanceof Kdyby\DoctrineMoney\Types\Money);
 	}

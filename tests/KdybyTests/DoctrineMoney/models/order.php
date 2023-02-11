@@ -11,7 +11,6 @@
 namespace KdybyTests\DoctrineMoney;
 
 use Doctrine\ORM\Mapping as ORM;
-use Kdyby\Doctrine\Entities\BaseEntity;
 use Kdyby\Money\Currency;
 use Kdyby\Money\Money;
 
@@ -27,7 +26,7 @@ use Kdyby\Money\Money;
  *    "specific" = "SpecificOrderEntity",
  * })
  */
-class OrderEntity extends BaseEntity
+class OrderEntity
 {
 
 	/**
@@ -61,16 +60,28 @@ class OrderEntity extends BaseEntity
 		}
 	}
 
+	public function getId(): int {
+		return $this->id;
+	}
 
+	public function getObscureNamedCurrencyField(): Currency {
+		return $this->obscureNamedCurrencyField;
+	}
 
-	public function getMoney()
+	public function getMoney(): Money
 	{
 		return $this->money;
 	}
 
+	public function setObscureNamedCurrencyField(Currency $obscureNamedCurrencyField): void {
+		$this->obscureNamedCurrencyField = $obscureNamedCurrencyField;
+	}
+
+
+	public function setMoney(Money $money): void {
+		$this->money = $money;
+	}
 }
-
-
 
 /**
  * @ORM\Entity()

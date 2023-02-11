@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+	<entity name="Kdyby\Money\Currency" table="currencies">
+		<id name="code" type="string" column="code" length="15"/>
+		<field name="number" type="string" length="5" nullable="false">
+			<options>
+				<option name="fixed">true</option>
+			</options>
+		</field>
+		<field name="name" type="string" length="100" nullable="false"/>
+		<field name="subunitsInUnit" column="subunits_in_unit" type="integer" length="3"/>
+		<field name="countries" type="json_array"/>
+
+		<one-to-many field="rates" target-entity="ExchangeRate" mapped-by="sell">
+			<cascade>
+				<cascade-persist/>
+				<cascade-merge/>
+			</cascade>
+		</one-to-many>
+	</entity>
+</doctrine-mapping>

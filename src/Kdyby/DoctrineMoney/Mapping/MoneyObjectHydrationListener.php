@@ -12,14 +12,13 @@ namespace Kdyby\DoctrineMoney\Mapping;
 
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Cache\CacheProvider;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Doctrine\ORM\Event\PreFlushEventArgs;
 use Doctrine\ORM\Events as ORMEvents;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Kdyby;
-use Kdyby\Doctrine\Events;
 use Kdyby\DoctrineMoney\CurrenciesConflictException;
 use Kdyby\Money\Currency;
 use Kdyby\Money\MetadataException;
@@ -59,7 +58,7 @@ class MoneyObjectHydrationListener implements Kdyby\Events\Subscriber
 
 
 
-	public function __construct(CacheProvider $cache, Reader $annotationReader, EntityManager $entityManager)
+	public function __construct(CacheProvider $cache, Reader $annotationReader, EntityManagerInterface $entityManager)
 	{
 		$this->cache = $cache;
 		$this->cache->setNamespace(get_called_class());
@@ -72,7 +71,7 @@ class MoneyObjectHydrationListener implements Kdyby\Events\Subscriber
 	public function getSubscribedEvents()
 	{
 		return array(
-			Events::loadClassMetadata,
+			ORMEvents::class . '::' . ORMEvents::loadClassMetadata,
 		);
 	}
 

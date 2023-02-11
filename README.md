@@ -10,10 +10,10 @@ Kdyby/DoctrineMoney
 Requirements
 ------------
 
-Kdyby/DoctrineMoney requires PHP 5.4 or higher.
+Kdyby/DoctrineMoney requires PHP 7.1 or higher.
 
 - [Kdyby/Money](https://github.com/kdyby/money)
-- [Kdyby/Doctrine](https://github.com/kdyby/doctrine)
+- [Nettrine/ORM](https://github.com/contributte/doctrine-orm)
 - [Nette Framework](https://github.com/nette/nette)
 
 
@@ -39,7 +39,29 @@ $ composer update
 Documentation
 ------------
 
-Learn more in the [documentation](https://github.com/Kdyby/DoctrineMoney/blob/master/docs/en/index.md).
+###Nettrine/ORM extension proxies
+Please use proxies for Doctrine related extensions (Nettrine packages) from [Davefu/Kdyby-Contributte-Bridge](https://github.com/davefu/Kdyby-Contributte-Bridge) package.
+The package provides few helper classes to simplify mapping configuration of this extension. The proxy package also provides cooperation of Kdyby/Events and Nettrine/ORM (Nettrine/DBAL respectively), if you use this package for event functionality.
+
+###Custom database types has to be registered in main project config file
+In older version of this package, that relied on Kdyby/Doctrine package, DB types were registered automatically (via proper interfaces in DI extension).
+Doctrine dependency was changed to Nettrine/ORM package, that does not provide this feature, so types have to be registered in config of your project.
+
+```yaml
+extensions:
+  nettrine.dbal: Davefu\KdybyContributteBridge\DI\DbalExtensionProxy
+	nettrine.orm: Davefu\KdybyContributteBridge\DI\OrmExtensionProxy
+
+nettrine.dbal:
+	connection:
+		types:
+			money:
+				class: Kdyby\DoctrineMoney\Types\Money
+				commented: true
+
+		typesMapping:
+			money: integer
+```
 
 
 -----

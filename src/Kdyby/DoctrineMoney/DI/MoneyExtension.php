@@ -10,6 +10,7 @@
 
 namespace Kdyby\DoctrineMoney\DI;
 
+use Davefu\KdybyContributteBridge\DI\Helper\MappingHelper;
 use Kdyby;
 use Kdyby\Events\DI\EventsExtension;
 use Nette\PhpGenerator as Code;
@@ -20,14 +21,14 @@ use Nette;
 /**
  * @author Filip Procházka <filip@prochazka.su>
  */
-class MoneyExtension extends Nette\DI\CompilerExtension implements Kdyby\Doctrine\DI\IDatabaseTypeProvider, Kdyby\Doctrine\DI\IEntityProvider
+class MoneyExtension extends Nette\DI\CompilerExtension
 {
 
 	/**
 	 * @var array
 	 */
 	public $defaults = array(
-		'cache' => 'default',
+		'cache' => 'filesystem',
 		'currencies' => array(),
 		'rates' => array(
 			'static' => array(),
@@ -74,41 +75,15 @@ class MoneyExtension extends Nette\DI\CompilerExtension implements Kdyby\Doctrin
 
 
 
-	/**
-	 * Returns array of typeName => typeClass.
-	 *
-	 * @return array
-	 */
-	public function getDatabaseTypes()
-	{
-		return array(
-			Kdyby\DoctrineMoney\Types\Money::MONEY => 'Kdyby\DoctrineMoney\Types\Money',
-			Kdyby\Money\Types\Amount::AMOUNT => 'Kdyby\Money\Types\Amount', // @deprecated
-			Kdyby\Money\Types\Currency::CURRENCY => 'Kdyby\Money\Types\Currency', // @deprecated
-		);
-	}
-
-
-
-	/**
-	 * Returns associative array of Namespace => mapping definition
-	 *
-	 * @return array
-	 */
-	public function getEntityMappings()
-	{
-		return array(
-			'Kdyby\Money' => (object) array('value' => 'yaml', 'attributes' => __DIR__ . '/metadata'),
-		);
-	}
-
-
-
 	public static function register(Nette\Configurator $configurator)
 	{
 		$configurator->onCompile[] = function ($config, Nette\DI\Compiler $compiler) {
 			$compiler->addExtension('money', new MoneyExtension());
 		};
 	}
-
+	
+	public function beforeCompile(): void {
+		MappingHelper::of($this)
+			->addXml('Kdyby\Money', __DIR__ . '/metadata');
+	}
 }

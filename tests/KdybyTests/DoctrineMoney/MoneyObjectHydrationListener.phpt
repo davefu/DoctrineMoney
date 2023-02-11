@@ -40,7 +40,7 @@ class MoneyObjectHydrationListenerTest extends IntegrationTestCase
 	private $container;
 
 	/**
-	 * @var \Kdyby\Doctrine\EntityManager
+	 * @var \Doctrine\ORM\EntityManagerInterface
 	 */
 	private $em;
 
@@ -57,7 +57,7 @@ class MoneyObjectHydrationListenerTest extends IntegrationTestCase
 
 		$this->container = $this->createContainer('order');
 
-		$this->em = $this->container->getByType('Kdyby\Doctrine\EntityManager');
+		$this->em = $this->container->getByType('Doctrine\ORM\EntityManagerInterface');
 		$this->listener = $this->container->getByType('Kdyby\DoctrineMoney\Mapping\MoneyObjectHydrationListener');
 	}
 
@@ -77,10 +77,12 @@ class MoneyObjectHydrationListenerTest extends IntegrationTestCase
 		), $class->entityListeners);
 
 		$this->generateDbSchema();
-		$currencies = $this->em->getRepository(Kdyby\Money\Currency::getClassName());
+		$currencies = $this->em->getRepository(Kdyby\Money\Currency::class);
 
 		// test money hydration
-		$this->em->persist(new $className(1000, 'CZK'))->flush()->clear();
+		$this->em->persist(new $className(1000, 'CZK'));
+		$this->em->flush();
+		$this->em->clear();
 
 		/** @var OrderEntity $order */
 		$order = $this->em->find($className, 1);
@@ -92,8 +94,8 @@ class MoneyObjectHydrationListenerTest extends IntegrationTestCase
 	public function dataEntityClasses()
 	{
 		return array(
-			array(OrderEntity::getClassName()),
-			array(SpecificOrderEntity::getClassName()),
+			array(OrderEntity::class),
+			array(SpecificOrderEntity::class),
 		);
 	}
 
@@ -129,19 +131,21 @@ class MoneyObjectHydrationListenerTest extends IntegrationTestCase
 	public function testRepeatedLoading()
 	{
 		$this->generateDbSchema();
-		$currencies = $this->em->getRepository(Kdyby\Money\Currency::getClassName());
+		$currencies = $this->em->getRepository(Kdyby\Money\Currency::class);
 
 		// test money hydration
-		$this->em->persist(new OrderEntity(1000, 'CZK'))->flush()->clear();
+		$this->em->persist(new OrderEntity(1000, 'CZK'));
+		$this->em->flush();
+		$this->em->clear();
 
 		/** @var OrderEntity $order */
-		$order = $this->em->find(OrderEntity::getClassName(), 1);
+		$order = $this->em->find(OrderEntity::class, 1);
 		Assert::equal(new Kdyby\Money\Money(1000, $currencies->find('CZK')), $order->getMoney());
 
 		// following loading should not fail
 		$order2 = $this->em->createQueryBuilder()
 			->select("o")
-			->from(OrderEntity::getClassName(), "o")
+			->from(OrderEntity::class, "o")
 			->where("o.id = :id")->setParameter("id", 1)
 			->getQuery()->getSingleResult();
 		Assert::same($order, $order2);
