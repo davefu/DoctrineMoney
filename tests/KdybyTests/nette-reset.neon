@@ -4,6 +4,8 @@ php:
 
 extensions:
 	events: Kdyby\Events\DI\EventsExtension
+	nettrine.annotations: Nettrine\Annotations\DI\AnnotationsExtension
+	nettrine.cache: Nettrine\Cache\DI\CacheExtension
 	nettrine.dbal: Davefu\KdybyContributteBridge\DI\DbalExtensionProxy
 	nettrine.orm: Davefu\KdybyContributteBridge\DI\OrmExtensionProxy
 	nettrine.orm.cache: Davefu\KdybyContributteBridge\DI\OrmCacheExtensionProxy
@@ -22,6 +24,9 @@ console:
 	url: http://example.com
 
 
+nettrine.cache:
+  driver: Doctrine\Common\Cache\ArrayCache
+
 nettrine.orm.cache:
 	queryCache: Doctrine\Common\Cache\ArrayCache
 	hydrationCache: Doctrine\Common\Cache\ArrayCache
@@ -39,8 +44,14 @@ nettrine.dbal:
 		typesMapping:
 			money: integer
 
+nettrine.annotations:
+	cache: Doctrine\Common\Cache\ArrayCache
+
 nettrine.orm.annotations:
-	defaultCache: array
+	mapping: []
+
+nettrine.orm.xml:
+	mapping: []
 
 money:
 	cache: array

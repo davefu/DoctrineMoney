@@ -10,62 +10,67 @@
 
 namespace Kdyby\DoctrineMoney\DI;
 
+use Davefu\KdybyContributteBridge\Cache\Helpers as CacheHelpers;
 use Davefu\KdybyContributteBridge\DI\Helper\MappingHelper;
-use Kdyby;
 use Kdyby\Events\DI\EventsExtension;
+use Nette\Configurator;
+use Nette\DI\Compiler;
+use Nette\DI\CompilerExtension;
 use Nette\PhpGenerator as Code;
-use Nette;
+use Nette\Schema\Expect;
+use Nette\Schema\Helpers as SchemaHelpers;
+use Nette\Schema\Schema;
+use stdClass;
 
 
 
 /**
  * @author Filip Procházka <filip@prochazka.su>
+ *
+ * @property-read stdClass $config
  */
-class MoneyExtension extends Nette\DI\CompilerExtension
+class MoneyExtension extends CompilerExtension
 {
 
-	/**
-	 * @var array
-	 */
-	public $defaults = array(
-		'cache' => 'filesystem',
-		'currencies' => array(),
-		'rates' => array(
-			'static' => array(),
-		),
-	);
-
-
+	public function getConfigSchema(): Schema {
+		return Expect::structure([
+			'cache' => Expect::string('filesystem'),
+			'currencies' => Expect::array(),
+			'rates' => Expect::structure([
+				'static' => Expect::array(),
+			]),
+		]);
+	}
 
 	public function loadConfiguration()
 	{
-		$config = $this->getConfig($this->defaults);
+		$config = $this->config;
 		$builder = $this->getContainerBuilder();
 
 		$builder->addDefinition($this->prefix('moneyHydrationListener'))
-			->setClass('Kdyby\DoctrineMoney\Mapping\MoneyObjectHydrationListener', array(
-				Kdyby\DoctrineCache\DI\Helpers::processCache($this, $config['cache'], 'money'),
-			))
+			->setFactory('Kdyby\DoctrineMoney\Mapping\MoneyObjectHydrationListener', [
+				CacheHelpers::processCache($this, $config->cache, 'money'),
+			])
 			->addTag(EventsExtension::TAG_SUBSCRIBER);
 
 		// @deprecated
 		$builder->addDefinition($this->prefix('rates'))
-			->setClass('Kdyby\Money\Exchange\StaticExchanger', array($config['rates']['static']));
+			->setFactory('Kdyby\Money\Exchange\StaticExchanger', [$config->rates->static]);
 	}
 
 
 
 	public function afterCompile(Code\ClassType $class)
 	{
-		$config = $this->getConfig($this->defaults);
+		$config = $this->config;
 
 		// @deprecated
-		if (!empty($config['currencies'])) {
+		if (!empty($config->currencies)) {
 			$init = $class->addMethod('_kdyby_initialize_currencies');
 			$init->setVisibility('protected');
 
-			foreach ($config['currencies'] as $code => $details) {
-				$details = Nette\DI\Config\Helpers::merge($details, array('number' => NULL, 'name' => NULL, 'decimals' => 0, 'countries' => array()));
+			foreach ($config->currencies as $code => $details) {
+				$details = SchemaHelpers::merge($details, array('number' => NULL, 'name' => NULL, 'decimals' => 0, 'countries' => array()));
 				$init->addBody('?(?, ?);', array(new Code\PhpLiteral('Kdyby\Money\CurrencyTable::registerRecord'), strtoupper($code), $details));
 			}
 
@@ -75,9 +80,9 @@ class MoneyExtension extends Nette\DI\CompilerExtension
 
 
 
-	public static function register(Nette\Configurator $configurator)
+	public static function register(Configurator $configurator)
 	{
-		$configurator->onCompile[] = function ($config, Nette\DI\Compiler $compiler) {
+		$configurator->onCompile[] = function ($config, Compiler $compiler) {
 			$compiler->addExtension('money', new MoneyExtension());
 		};
 	}

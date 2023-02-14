@@ -24,12 +24,6 @@
 		{
 			"type": "vcs",
 			"url": "https://github.com/davefu/Money"
-		}
-	],
-	"repositories": [
-		{
-			"type": "vcs",
-			"url": "https://github.com/davefu/Money"
 		},
 		{
 			"type": "vcs",
@@ -38,38 +32,35 @@
 	],
 	"require": {
 		"php": ">=7.1",
-		"nette/di": "~2.4@dev",
-		"davefu/kdyby-contributte-bridge": "@dev",
-		"doctrine/orm": "~2.5 <2.7.3",
-		"kdyby/money": "@dev",
+		"nette/di": "~3.0@dev",
+		"davefu/kdyby-contributte-bridge": "^0.2",
+		"kdyby/money": "dev-master",
 		"symfony/yaml": "~3.0|~4.0|~5.0"
 	},
 	"require-dev": {
-		"kdyby/events": "~2.3@dev|~3.0@dev",
-		"kdyby/console": "~2.7@dev",
-		"kdyby/doctrine-cache": "~2.6@dev",
+		"kdyby/events": "~4.0@dev|~5.0@dev",
+		"kdyby/console": "~2.9@dev|~3.0@dev|~4.0@dev",
 
-		"nette/application": "~2.4@dev",
-		"nette/bootstrap": "~2.4@dev",
-		"nette/caching": "~2.4@dev",
-		"nette/component-model": "~2.2@dev",
-		"nette/database": "~2.4@dev",
-		"nette/deprecated": "~2.4@dev",
-		"nette/di": "~2.4@dev",
-		"nette/finder": "~2.4@dev",
-		"nette/forms": "~2.4@dev",
-		"nette/http": "~2.4@dev",
-		"nette/mail": "~2.4@dev",
-		"nette/neon": "~2.4@dev",
-		"nette/php-generator": "~2.4@dev",
+		"nette/application": "~3.0@dev",
+		"nette/bootstrap": "~3.0@dev",
+		"nette/caching": "~3.0@dev",
+		"nette/component-model": "~3.0@dev",
+		"nette/database": "~3.0@dev",
+		"nette/deprecated": "~3.0@dev",
+		"nette/finder": "~2.5@dev",
+		"nette/forms": "~3.0@dev",
+		"nette/http": "~3.0@dev",
+		"nette/mail": "~3.0@dev",
+		"nette/neon": "~3.0@dev",
+		"nette/php-generator": "~3.0@dev",
 		"nette/reflection": "~2.4@dev",
-		"nette/robot-loader": "~2.4@dev",
+		"nette/robot-loader": "~3.0@dev",
 		"nette/safe-stream": "~2.4@dev",
-		"nette/security": "~2.4@dev",
-		"nette/tokenizer": "~2.2@dev",
-		"latte/latte": "~2.4@dev",
-		"tracy/tracy": "~2.4@dev",
-		"nette/utils": "~2.4@dev",
+		"nette/security": "~3.0@dev",
+		"nette/tokenizer": "~3.0@dev",
+		"latte/latte": "~2.5@dev",
+		"tracy/tracy": "~2.6@dev",
+		"nette/utils": "~3.0@dev",
 
 		"nette/tester": "~2.0"
 	},
