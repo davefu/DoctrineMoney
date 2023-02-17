@@ -9,7 +9,7 @@
 		</field>
 		<field name="name" type="string" length="100" nullable="false"/>
 		<field name="subunitsInUnit" column="subunits_in_unit" type="integer" length="3"/>
-		<field name="countries" type="json_array"/>
+		<field name="countries" type="json"/>
 
 		<one-to-many field="rates" target-entity="ExchangeRate" mapped-by="sell">
 			<cascade>

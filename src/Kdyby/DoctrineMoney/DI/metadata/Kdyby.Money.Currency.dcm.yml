@@ -20,7 +20,7 @@ Kdyby\Money\Currency:
       column: subunits_in_unit
       length: 3
     countries:
-      type: json_array
+      type: json
   oneToMany:
     rates:
       targetEntity: ExchangeRate
