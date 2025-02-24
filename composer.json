@@ -27,13 +27,13 @@
 		},
 		{
 			"type": "vcs",
-			"url": "https://github.com/davefu/KdybyEvents-ContributteDoctrine-Proxy"
+			"url": "https://github.com/davefu/Kdyby-Contributte-Bridge"
 		}
 	],
 	"require": {
 		"php": ">=7.1",
 		"nette/di": "~3.0@dev",
-		"davefu/kdyby-contributte-bridge": "^0.2",
+		"davefu/kdyby-contributte-bridge": "^0.3",
 		"doctrine/dbal": ">=2.10.1",
 		"kdyby/money": "dev-master",
 		"symfony/yaml": "~3.0|~4.0|~5.0"
